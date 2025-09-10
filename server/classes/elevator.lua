@@ -87,10 +87,9 @@ end
 
 ---Get the floor positions where the user can interact
 ---@param source any
----@return boolean | {name: string; id: string; floors: vector4[]}
-function Elevator:getFloorPositions(source)
-    local bucket = GetPlayerRoutingBucket(source)
-
+---@param bucket number
+---@return false | {name: string; id: string; floors: vector4[]}
+function Elevator:getFloorPositions(source, bucket)
     local floors = {}
 
     if (not self:canUse(source)) then return false end
