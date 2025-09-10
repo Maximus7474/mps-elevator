@@ -1,33 +1,5 @@
 if not CanResourceBeUsed(true) then return end
 
-local NUI = require 'client.modules.nui'
-local Utils = require 'client.modules.utils'
-local TP = require 'client.modules.teleport'
-local Framework = require (('client.modules.frameworks.%s'):format(GetFrameworkRequirePath()))
-
-local resourceName = GetCurrentResourceName()
-local currentElevator, isMoving = nil, false
-State = {}
-
-AddEventHandler(("%s:openElevator"):format(resourceName), function (data)
-    DebugPrint('[^2openElevator^7]', data.data)
-
-    local data = data.data
-    currentElevator = data.elevator
-
-    local isRestricted = Config.Elevators?[data.elevator]?.restricted or false
-
-    NUI.SendReactMessage('setFloors', {
-        isRestricted = isRestricted and true or false,
-        hasAccess = isRestricted and Framework:HasGroup(isRestricted) or nil,
-        currentFloor = data.floor,
-        floorButtons = Utils.FormatFloors(Config.Elevators?[data.elevator]?.floors)
-    })
-
-    State.UIOpen = true
-    NUI.ToggleNui(true)
-end)
-
 if Config.Debug then
     RegisterCommand('show-nui', function()
         NUI.ToggleNui(true)
