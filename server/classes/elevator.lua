@@ -19,9 +19,14 @@ local FW = GetFrameworkObject()
 ---@field items? string | string[] | table<string, table<string, any>> either an item name, array of items or item and metadata table pair
 ---@field floors ElevatorFloorData[]
 
+---@class ElevatorFloorInternal: ElevatorFloorData
+---@field groups table<string, number> | false
+---@field items table<string, table<string, any>|true> | false
+
 ---@class ElevatorFloor
 ---@field name string
 ---@field current boolean
+---@field accessible boolean
 ---@field icon? string used for floor number i.e. "-01", "G", "SB"
 
 ---@class Elevator
@@ -56,5 +61,42 @@ function Elevator:canUse(source)
     return FW:HasGroup(source, self.groups)
 end
 
+---Returns a list of floors for the elevator
+---@param source number
+---@return ElevatorFloor[]
 function Elevator:getFloors(source)
+    local playerPed = GetPlayerPed(source)
+    local playerCoords = GetEntityCoords(playerPed)
+    local playerBucket = GetPlayerRoutingBucket(tostring(source))
+    local floors = {} --[[ @as ElevatorFloor[] ]]
+
+    for i = 1, #self.floors, 1 do
+        local floorData = self.floors[i] --[[ @as ElevatorFloorInternal ]]
+
+        local isCurrentFloor = false
+        if (#(floorData.coords - playerCoords) < Config.Options.Distance) then
+            isCurrentFloor = true
+
+            if (type(floorData.bucket) == "number") then
+                isCurrentFloor = floorData.bucket == playerBucket
+            end
+        end
+
+        local canAccess = true
+        if (canAccess and floorData.groups and not FW:HasGroup(source, floorData.groups)) then
+            canAccess = false
+        end
+        if (canAccess and floorData.items and not FW:HasItem(source, floorData.items)) then
+            canAccess = false
+        end
+
+        floors[i] = {
+            name = floorData.name,
+            icon = floorData.icon,
+            current = isCurrentFloor,
+            accessible = canAccess,
+        }
+    end
+
+    return floors
 end
