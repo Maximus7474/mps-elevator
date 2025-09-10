@@ -27,8 +27,8 @@ Elevator.elevators = {}
 ---@field name string
 ---@field groups table<string, number> | false
 ---@field items table<string, true | table<string, any>> | false
----@field canUse fun(self: Elevator, source: string): boolean
----@field getFloors fun(self: Elevator, source: string): ElevatorFloor[]
+---@field canUse fun(self: Elevator, source: number): boolean
+---@field getFloors fun(self: Elevator, source: number): ElevatorFloor[]
 
 ---Creates a new elevator
 ---@param data ElevatorData
@@ -46,7 +46,7 @@ function Elevator:new(data)
 end
 
 ---Checks if a player can use an elevator
----@param source string
+---@param source number
 ---@return boolean
 function Elevator:canUse(source)
     return true
