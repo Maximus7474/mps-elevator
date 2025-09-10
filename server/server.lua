@@ -8,8 +8,8 @@ local function updatePlayerTargets(source)
     local bucket = GetPlayerRoutingBucket(source)
     local targets = {}
 
-    for _, Elevator in pairs(Elevator.elevators) do
-        local data = Elevator:getFloorPositions(source, bucket)
+    for _, elevator in pairs(Elevator.elevators) do
+        local data = elevator:getFloorPositions(source, bucket)
 
         if (data) then
             table.insert(targets, data)
