@@ -20,11 +20,13 @@ local FW = GetFrameworkObject()
 ---@field floors ElevatorFloorData[]
 
 ---@class ElevatorFloorInternal: ElevatorFloorData
+---@field id number
 ---@field groups table<string, number> | false
 ---@field items table<string, table<string, any>|true> | false
 ---@field bucket number
 
 ---@class ElevatorFloor
+---@field id number
 ---@field name string
 ---@field current boolean
 ---@field accessible boolean
@@ -55,6 +57,7 @@ function Elevator:new(data)
         local floorData = data.floors[i]
 
         local sanitizedData = {
+            id = i,
             name = floorData.name,
             icon = floorData.icon,
             groups = SanitizeGroups(floorData.groups),
@@ -112,11 +115,12 @@ function Elevator:getFloors(source)
         end
 
         floors[i] = {
+            id = floorData.id,
             name = floorData.name,
             icon = floorData.icon,
             current = isCurrentFloor,
             accessible = canAccess,
-        }
+        } --[[ @as ElevatorFloor ]]
     end
 
     return floors
