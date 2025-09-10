@@ -7,6 +7,8 @@ local ESX = exports.es_extended:getSharedObject()
 ---@param permissions table<string, number>
 ---@return boolean
 function Framework:HasGroup(source, permissions)
+    if (not permissions) then return true end
+
     local xPlayer = ESX.GetPlayerFromId(source)
     local job, grade = xPlayer.job.name, xPlayer.job.grade
 

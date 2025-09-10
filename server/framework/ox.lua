@@ -7,6 +7,8 @@ local Ox = require '@ox_core.lib.init'
 ---@param permissions table<string, number>
 ---@return boolean
 function Framework:HasGroup(source, permissions)
+    if (not permissions) then return true end
+
     local player = Ox.GetPlayer(source)
 
     local group, _ = player.getGroup(permissions)

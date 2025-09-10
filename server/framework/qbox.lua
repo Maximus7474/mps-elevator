@@ -5,6 +5,8 @@ local Framework = {}
 ---@param permissions table<string, number>
 ---@return boolean
 function Framework:HasGroup(source, permissions)
+    if (not permissions) then return true end
+
     return exports.qbx_core:HasGroup(source, permissions)
 end
 
