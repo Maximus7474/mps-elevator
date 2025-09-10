@@ -124,3 +124,51 @@ function Elevator:getFloors(source)
 
     return floors
 end
+
+---Teleport a player to the desired floor
+---@param source number | string
+---@param floorid number
+---@return boolean success
+function Elevator:gotoFloor(source, floorid)
+    local playerPed = GetPlayerPed(source)
+    local playerCoords = GetEntityCoords(playerPed)
+    local playerBucket = GetPlayerRoutingBucket(tostring(source))
+
+    local isInElevator = false
+    local floorToGoto
+    for i = 1, #self.floors, 1 do
+        local floorData = self.floors[i] --[[ @as ElevatorFloorInternal ]]
+
+        if (#(floorData.coords - playerCoords) < Config.Options.Distance) then
+            isInElevator = true
+
+            if (type(floorData.bucket) == "number") then
+                isInElevator = floorData.bucket == playerBucket
+            end
+        elseif floorData.id == floorid then
+            floorToGoto = floorData
+        end
+    end
+
+    if (not isInElevator or not floorToGoto) then
+        warn(string.format('Player %s (%d) tried to exploit Elevator:gotoFloor !', GetPlayerName(source), tonumber(source)))
+        return false
+    end
+
+    TriggerClientEvent('elevator:client:changingfloor', source, true)
+
+    if (playerBucket ~= floorToGoto.bucket) then
+        SetPlayerRoutingBucket(source --[[ @as string ]], floorToGoto.bucket)
+    end
+
+    Wait(200)
+
+    SetEntityCoords(playerPed, floorToGoto.coords.x, floorToGoto.coords.y, floorToGoto.coords.z, true, false, false, false)
+    SetEntityHeading(playerPed, floorToGoto.coords.w)
+
+    Wait(200)
+
+    TriggerClientEvent('elevator:client:changingfloor', source, false)
+
+    return true
+end
