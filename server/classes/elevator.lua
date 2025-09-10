@@ -172,12 +172,11 @@ function Elevator:gotoFloor(source, floorid)
     for i = 1, #self.floors, 1 do
         local floorData = self.floors[i] --[[ @as ElevatorFloorInternal ]]
 
-        if (#(floorData.coords - playerCoords) < Config.Options.Distance) then
+        if (
+                floorData.bucket == playerBucket
+            and #(floorData.coords - playerCoords) < Config.Options.Distance
+        ) then
             isInElevator = true
-
-            if (type(floorData.bucket) == "number") then
-                isInElevator = floorData.bucket == playerBucket
-            end
         elseif floorData.id == floorid then
             floorToGoto = floorData
         end
