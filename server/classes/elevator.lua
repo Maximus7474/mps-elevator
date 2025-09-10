@@ -40,6 +40,7 @@ local FW = GetFrameworkObject()
 ---@field canUse fun(self: Elevator, source: number): boolean
 ---@field getFloors fun(self: Elevator, source: number): ElevatorFloor[]
 ---@field getFloorPositions fun(self: Elevator, source: number, bucket: number): false | {name: string; id: string; floors: vector4[]}
+---@field isInElevator fun(self: Elevator, source): boolean
 
 ---Creates a new elevator
 ---@param data ElevatorData
@@ -207,4 +208,26 @@ function Elevator:gotoFloor(source, floorid)
     TriggerClientEvent('elevator:client:changingfloor', source, false)
 
     return true
+end
+
+---Checks if a player is within the elevator
+---@param source number
+---@return boolean
+function Elevator:isInElevator(source)
+    local playerPed = GetPlayerPed(source)
+    local playerCoords = GetEntityCoords(playerPed)
+    local playerBucket = GetPlayerRoutingBucket(tostring(source))
+
+    for i = 1, #self.floors, 1 do
+        local floorData = self.floors[i] --[[ @as ElevatorFloorInternal ]]
+
+        if (
+                floorData.bucket == playerBucket
+            and #(floorData.coords - playerCoords) < Config.Options.Distance
+        ) then
+            return true
+        end
+    end
+
+    return false
 end
