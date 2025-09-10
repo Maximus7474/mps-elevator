@@ -16,5 +16,5 @@ if not target then error("No Target/Zone Script Found ! This resource will not w
 lib.callback.register("5m-Elevator:ZoneHandler", function () return target end)
 
 if Config.VersionCheck then
-    lib.versionCheck('Maximus7474/5M-Elevator')
+    lib.versionCheck('Maximus7474/mps-elevator')
 end
