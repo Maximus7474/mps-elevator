@@ -85,6 +85,39 @@ function Elevator:canUse(source)
     return FW:HasGroup(source, self.groups)
 end
 
+---Get the floor positions where the user can interact
+---@param source any
+---@return boolean | {name: string; id: string; floors: vector4[]}
+function Elevator:getFloorPositions(source)
+    local bucket = GetPlayerRoutingBucket(source)
+
+    local floors = {}
+
+    if (not self:canUse(source)) then return false end
+
+    for i = 1, #self.floors, 1 do
+        local floorData = self.floors[i] --[[ @as ElevatorFloorInternal ]]
+
+        if (floorData.bucket ~= bucket) then
+            goto continue
+        elseif (floorData.groups and not FW:HasGroup(source, floorData.groups)) then
+            goto continue
+        elseif (floorData.items and not FW:HasItem(source, floorData.items)) then
+            goto continue
+        end
+
+        table.insert(floors, floorData.coords)
+
+        ::continue::
+    end
+
+    return {
+        id = self.id,
+        name = self.name,
+        floors = floors,
+    }
+end
+
 ---Returns a list of floors for the elevator
 ---@param source number
 ---@return ElevatorFloor[]
