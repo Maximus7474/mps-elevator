@@ -192,6 +192,10 @@ function Elevator:gotoFloor(source, floorid)
 
     if (playerBucket ~= floorToGoto.bucket) then
         SetPlayerRoutingBucket(source --[[ @as string ]], floorToGoto.bucket)
+
+        -- Shared method with ox_inventory, this will make drops limited
+        -- to the new routing bucket
+        Player(source).state:set('instance', floorToGoto.bucket, true)
     end
 
     Wait(200)
