@@ -98,12 +98,11 @@ function Elevator:getFloors(source)
         local floorData = self.floors[i] --[[ @as ElevatorFloorInternal ]]
 
         local isCurrentFloor = false
-        if (#(floorData.coords - playerCoords) < Config.Options.Distance) then
+        if (
+                floorData.bucket == playerBucket
+            and #(floorData.coords - playerCoords) < Config.Options.Distance
+        ) then
             isCurrentFloor = true
-
-            if (type(floorData.bucket) == "number") then
-                isCurrentFloor = floorData.bucket == playerBucket
-            end
         end
 
         local canAccess = true
