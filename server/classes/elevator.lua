@@ -1,6 +1,6 @@
 Elevator = {}
 Elevator.__index = Elevator
-Elevator.elevators = {}
+Elevator.elevators = {} --[[ @as table<string, Elevator> ]]
 
 local FW = GetFrameworkObject()
 
@@ -39,6 +39,7 @@ local FW = GetFrameworkObject()
 ---@field items table<string, true | table<string, any>> | false
 ---@field canUse fun(self: Elevator, source: number): boolean
 ---@field getFloors fun(self: Elevator, source: number): ElevatorFloor[]
+---@field getFloorPositions fun(self: Elevator, source: number, bucket: number): false | {name: string; id: string; floors: vector4[]}
 
 ---Creates a new elevator
 ---@param data ElevatorData
