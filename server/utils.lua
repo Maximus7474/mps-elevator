@@ -1,5 +1,6 @@
 ---@class Framework
 ---@field HasGroup fun(self: Framework, source: number, permissions: table<string, number>): boolean
+---@field HasItem fun(self: Framework, source: number, items: table<string, table<string, any>|true>): boolean
 
 ---@type Framework
 local framework = require (string.format('server.framework.%s', GetFramework()))
