@@ -1,3 +1,14 @@
+---@class Framework
+---@field HasGroup fun(self: Framework, source: string, permissions: table<string, number>): boolean
+
+---@type Framework
+local framework = require (string.format('server.framework.%s', GetFramework()))
+
+---@return Framework
+function GetFrameworkObject()
+    return framework
+end
+
 ---@param groups? string | string[] | table<string, number>
 ---@return false | table<string, number>
 function SanitizeGroups(groups)
