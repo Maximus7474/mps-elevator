@@ -22,6 +22,7 @@ local FW = GetFrameworkObject()
 ---@class ElevatorFloorInternal: ElevatorFloorData
 ---@field groups table<string, number> | false
 ---@field items table<string, table<string, any>|true> | false
+---@field bucket number
 
 ---@class ElevatorFloor
 ---@field name string
@@ -48,6 +49,24 @@ function Elevator:new(data)
 
     self.groups = SanitizeGroups(data.groups)
     self.items = SanitizeItems(data.items)
+
+    local floors = {} --[[ @as ElevatorFloorInternal[] ]]
+    for i = 1, #data.floors, 1 do
+        local floorData = data.floors[i]
+
+        local sanitizedData = {
+            name = floorData.name,
+            icon = floorData.icon,
+            groups = SanitizeGroups(floorData.groups),
+            items = SanitizeItems(floorData.items),
+            bucket = floorData.bucket or 0,
+            coords = floorData.coords,
+        } --[[ @as ElevatorFloorInternal ]]
+
+        floors[i] = sanitizedData
+    end
+
+    self.floors = floors
 
     return self
 end
