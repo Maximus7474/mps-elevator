@@ -21,7 +21,7 @@ If you like this resource please drop a star, it's always appreciated and gives 
 
 ## Requirements:
 - [ox_lib](https://github.com/overextended/ox_lib/releases)
-- (optionnal) [es_extended](https://github.com/esx-framework/esx_core/releases) or [ox_core](https://github.com/overextended/ox_core/releases) or [qb-core](https://github.com/qbcore-framework/qb-core/releases)
+- (optionnal) [es_extended](https://github.com/esx-framework/esx_core/releases) or [ox_core](https://github.com/overextended/ox_core/releases) or [qbx_core](https://github.com/Qbox-Project/qbx_core/releases)
   - For using job/group restricted elevators
 - (optionnal) [ox_target](https://github.com/overextended/ox_target/releases) or [qb-target](https://github.com/qbcore-framework/qb-target)
   - For target enable it in the config.
