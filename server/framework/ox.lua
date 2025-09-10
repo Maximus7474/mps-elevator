@@ -39,4 +39,11 @@ function Framework:HasItem(source, items)
     return false
 end
 
+AddEventHandler('ox:playerLoaded', function (playerId)
+    exports['mps-elevator']:UpdatePlayerTargets(playerId)
+end)
+AddEventHandler('ox:setGroup', function (playerId)
+    exports['mps-elevator']:UpdatePlayerTargets(playerId)
+end)
+
 return Framework
