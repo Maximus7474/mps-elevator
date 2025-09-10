@@ -20,4 +20,9 @@ function Framework:HasItem(source, items)
     return true
 end
 
+---trigger the update method so elevators are generated on connection
+AddEventHandler('playerJoining', function (playerId)
+    exports['mps-elevator']:UpdatePlayerTargets(playerId)
+end)
+
 return Framework
