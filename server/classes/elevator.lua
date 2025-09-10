@@ -2,6 +2,8 @@ Elevator = {}
 Elevator.__index = Elevator
 Elevator.elevators = {}
 
+local FW = GetFrameworkObject()
+
 ---@class ElevatorFloorData
 ---@field name string
 ---@field icon? string used for floor number i.e. "-01", "G", "SB"
@@ -49,7 +51,9 @@ end
 ---@param source number
 ---@return boolean
 function Elevator:canUse(source)
-    return true
+    if (not self.groups) then return true end
+
+    return FW:HasGroup(source, self.groups)
 end
 
 function Elevator:getFloors(source)
