@@ -1,14 +1,23 @@
 import React from "react";
 import "../App.css";
+import { type FloorData } from "../../types";
+import { formatFloorIcon } from "../../utils/misc";
 
 interface FloorViewProps {
-    floor: number | string | null; // Assuming floor is a number
+    floor: FloorData | "ERR" | null;
 }
 
 const FloorView: React.FC<FloorViewProps> = ({ floor }) => {
-    const paddedFloor = floor === "X" || floor === "ERR" ? floor : floor != null ? String(floor).padStart(2, '0') : '00';
+    const paddedFloor = typeof floor === "string"
+        ? floor
+        : floor && typeof floor === 'object'
+            ? formatFloorIcon(floor)
+            : '00';
+    
+    const isError = paddedFloor === 'ERR';
+
     return (
-        <div className="floor-indicator" style={floor === "ERR" || floor === "X" ? { color: "red" } : {}}>
+        <div className="floor-indicator" style={isError ? { color: "red" } : {}}>
             {paddedFloor}
         </div>
     );
