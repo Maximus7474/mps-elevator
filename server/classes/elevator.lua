@@ -38,7 +38,7 @@ local FW = GetFrameworkObject()
 ---@field groups table<string, number> | false
 ---@field items table<string, true | table<string, any>> | false
 ---@field canUse fun(self: Elevator, source: number): boolean
----@field getFloors fun(self: Elevator, source: number): ElevatorFloor[]
+---@field getFloors fun(self: Elevator, source: number): { restricted: boolean; floors: ElevatorFloor[] }
 ---@field getFloorPositions fun(self: Elevator, source: number, bucket: number): false | {name: string; id: string; floors: vector4[]}
 ---@field isInElevator fun(self: Elevator, source): boolean
 
@@ -121,12 +121,13 @@ end
 
 ---Returns a list of floors for the elevator
 ---@param source number
----@return ElevatorFloor[]
+---@return { restricted: boolean; floors: ElevatorFloor[]}
 function Elevator:getFloors(source)
     local playerPed = GetPlayerPed(source)
     local playerCoords = GetEntityCoords(playerPed)
     local playerBucket = GetPlayerRoutingBucket(tostring(source))
     local floors = {} --[[ @as ElevatorFloor[] ]]
+    local hasRestrictions = false
 
     for i = 1, #self.floors, 1 do
         local floorData = self.floors[i] --[[ @as ElevatorFloorInternal ]]
@@ -147,6 +148,10 @@ function Elevator:getFloors(source)
             canAccess = false
         end
 
+        if (not hasRestrictions and (floorData.items or floorData.groups)) then
+            hasRestrictions = true
+        end
+
         floors[i] = {
             id = floorData.id,
             name = floorData.name,
@@ -156,7 +161,10 @@ function Elevator:getFloors(source)
         } --[[ @as ElevatorFloor ]]
     end
 
-    return floors
+    return {
+        restricted = hasRestrictions or (self.groups or self.items) ~= false,
+        floors = floors
+    }
 end
 
 ---Teleport a player to the desired floor
