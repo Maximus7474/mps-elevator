@@ -135,7 +135,7 @@ function Elevator:getFloors(source)
         local isCurrentFloor = false
         if (
                 floorData.bucket == playerBucket
-            and #(floorData.coords - playerCoords) < Config.Options.Distance
+            and #(floorData.coords.xyz - playerCoords) < Config.Options.Distance
         ) then
             isCurrentFloor = true
         end
@@ -183,7 +183,7 @@ function Elevator:gotoFloor(source, floorid)
 
         if (
                 floorData.bucket == playerBucket
-            and #(floorData.coords - playerCoords) < Config.Options.Distance
+            and #(floorData.coords.xyz - playerCoords) < Config.Options.Distance
         ) then
             isInElevator = true
         elseif floorData.id == floorid then
@@ -231,7 +231,7 @@ function Elevator:isInElevator(source)
 
         if (
                 floorData.bucket == playerBucket
-            and #(floorData.coords - playerCoords) < Config.Options.Distance
+            and #(floorData.coords.xyz - playerCoords) < Config.Options.Distance
         ) then
             return true
         end
