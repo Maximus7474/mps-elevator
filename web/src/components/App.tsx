@@ -37,7 +37,7 @@ const App: React.FC = () => {
   const [restrictedState, setRestrictedState] = useState<boolean>(false);
   const [floorButtons, setFloorButtons] = useState<FloorData[]>([]);
 
-  useNuiEvent<ElevatorData>('SetElevatorData', ({ restricted, floors }) => {
+  useNuiEvent<ElevatorData>('SetElevatorData', ({ restricted, floors, access = null }) => {
     const currentFloor = floors.find((e) => e.current);
 
     if (!currentFloor || floors.length < 1) {
@@ -47,7 +47,7 @@ const App: React.FC = () => {
       return;
     }
     
-    setAccess('standby');
+    setAccess(access ?? 'standby');
     setRestrictedState(restricted);
     setCurrentFloor(currentFloor);
     setFloorButtons(floors);
@@ -60,18 +60,11 @@ const App: React.FC = () => {
     }
 
     fetchNui<boolean>("SetNewFloor", { floorIndex: floor.id }, true)
-      .then((accessible) => {
-        if (accessible) {
-          setAccess('authorised');
-        } else {
-          setAccess('denied');
-        }
-      })
-      .catch((e) => {
-        console.error('An error occured:', e);
-        setCurrentFloor("ERR");
-        setAccess('denied');
-      });
+    .catch((e) => {
+      console.error('An error occured:', e);
+      setCurrentFloor("ERR");
+      setAccess('denied');
+    });
   };
 
   return (
