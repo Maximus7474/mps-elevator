@@ -41,6 +41,7 @@ local FW = GetFrameworkObject()
 ---@field getFloors fun(self: Elevator, source: number): { restricted: boolean; floors: ElevatorFloor[] }
 ---@field getFloorPositions fun(self: Elevator, source: number, bucket: number): false | {name: string; id: string; floors: vector4[]}
 ---@field isInElevator fun(self: Elevator, source): boolean
+---@field gotoFloor fun(self: Elevator, source, floorid: number): boolean
 
 ---Creates a new elevator
 ---@param data ElevatorData
