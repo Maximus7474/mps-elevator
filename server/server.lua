@@ -29,6 +29,38 @@ Citizen.SetTimeout(500, function ()
     end
 end)
 
+lib.callback.register("elevator:getfloordata", function (source, elevatorId)
+    local elevator = Elevator.elevators[elevatorId]
+    lib.print.info('elevator found:', not not elevator)
+    if (not elevator) then return false end
+
+    local isAcceptable = elevator:isInElevator(source)
+    lib.print.info('elevator acceptable:', isAcceptable)
+    if (not isAcceptable) then return false end
+
+    Events:setActive(source, elevator.id);
+
+    local floorData = elevator:getFloors(source)
+
+    return floorData
+end)
+
+Events:ElevatorCallback('elevator:internal:setnewfloor', function (source, elevator --[[ @as Elevator ]], floorIndex)
+    local success = elevator:gotoFloor(source, floorIndex)
+
+    local data = elevator:getFloors(source)
+
+    return {
+        restricted = data.restricted,
+        floors = data.floors,
+        access = success and 'authorized' or 'denied',
+    }
+end)
+
+RegisterNetEvent('elevator:internal:closedinterface', function ()
+    Events:removeActive(source)
+end)
+
 if Config.VersionCheck then
     lib.versionCheck('Maximus7474/mps-elevator')
 end
