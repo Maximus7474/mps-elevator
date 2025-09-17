@@ -23,27 +23,22 @@ function Events:removeActive(source)
 end
 
 ---@param event string
----@param callback fun(source: number, elevator: Elevator, ...)
-function Events:NetEvent(event, callback)
-    RegisterNetEvent(event, function (...)
-        local src = tonumber(source)
-
-        if (not src) then return end
-
-        local elevatorId = self.activePlayers[tostring(src)]
-
+---@param callback fun(source: number, elevator: Elevator, ...): any
+function Events:ElevatorCallback(event, callback)
+    lib.callback.register(event, function (source, ...)
+        local elevatorId = self.activePlayers[tostring(source)]
         if (not elevatorId) then
-            warn(string.format('Player %d is not listed as active, could be a cheat attempt', src))
+            warn(string.format('Player %d is not listed as active, could be a cheat attempt', source))
             return
         end
 
         local elevator = Elevator.elevators[elevatorId]
 
         if (not elevator) then
-            warn(string.format('No elevator found for active player %d with id %s', src, elevatorId))
+            warn(string.format('No elevator found for active player %d with id %s', source, elevatorId))
             return
         end
 
-        callback(src, elevator, ...)
+        return callback(source, elevator, ...)
     end)
 end
