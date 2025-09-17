@@ -25,6 +25,8 @@ shared_scripts {
 }
 
 client_script 'client/*.lua'
-server_script 'server/*.lua'
+server_script 'server/utils.lua'
+server_script 'server/classes/*.lua'
+server_script 'server/server.lua'
 
 dependancy 'ox_lib'
