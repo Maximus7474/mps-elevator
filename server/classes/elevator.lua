@@ -73,7 +73,7 @@ function Elevator:new(data)
 
     self.floors = floors
 
-    Elevator.elevators[data.name] = self
+    Elevator.elevators[data.id] = self
 
     return self
 end
