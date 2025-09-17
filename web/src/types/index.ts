@@ -6,9 +6,10 @@ export interface FloorData {
     accessible: boolean;
 }
 
+export type AccessStatus = 'standby' | 'authorised' | 'denied';
+
 export interface ElevatorData {
     restricted: boolean;
+    access?: AccessStatus;
     floors: FloorData[];
 }
-
-export type AccessStatus = 'standby' | 'authorised' | 'denied';
