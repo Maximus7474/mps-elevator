@@ -20,6 +20,15 @@ local function updatePlayerTargets(source)
 end
 exports('UpdatePlayerTargets', updatePlayerTargets)
 
+Citizen.SetTimeout(500, function ()
+    local players = GetPlayers()
+
+    for i = 1, #players do
+        local player = tonumber(players[i])
+        updatePlayerTargets(player)
+    end
+end)
+
 if Config.VersionCheck then
     lib.versionCheck('Maximus7474/mps-elevator')
 end
