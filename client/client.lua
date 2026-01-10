@@ -1,5 +1,9 @@
 if not CanResourceBeUsed(true) then return end
 
+State = {
+    UIOpen = false,
+}
+
 local NUI = require 'client.modules.nui'
 local isTravelling = false
 
