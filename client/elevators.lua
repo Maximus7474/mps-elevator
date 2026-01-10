@@ -10,6 +10,8 @@ ClElevator.elevators = {} --[[ @as table<string, ClElevator> ]]
 ---@field floors vector4[]
 
 ---@class ClElevator : ClElevatorData
+---@field openElevator fun(): nil
+---@field delete fun(): nil
 
 function ClElevator.clearAll()
     for i = 1, #ClElevator.elevators, 1 do
