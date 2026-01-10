@@ -2,8 +2,26 @@ if not CanResourceBeUsed(true) then return end
 
 local NUI = require 'client.modules.nui'
 
-RegisterNetEvent('elevator:updateelevators', function (elevators --[[ @as {name: string; id: string; floors: vector4[]} ]])
+RegisterNetEvent('elevator:updateelevators', function (
+    elevators --[[ @as {name: string; id: string; floors: vector4[]} ]],
+    hardReset --[[ @as boolean ]]
+)
+
+    if (hardReset) then
+        ClElevator.clearAll()
+    end
+
     for i = 1, #elevators, 1 do
+        local data = elevators[i]
+        -- Only in the case of an elevator getting an update during runtime
+        -- if not hardReset flag takes care of it
+        if ClElevator.elevators[data.id] then
+            local elevator = ClElevator.elevators[data.id]
+
+            elevator:delete()
+            ClElevator.elevators[data.id] = nil
+        end
+
         ClElevator:new(elevators[i])
     end
 end)
