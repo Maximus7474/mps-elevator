@@ -76,6 +76,15 @@ function Elevator:new(data)
 
     Elevator.elevators[data.id] = self
 
+    Citizen.CreateThreadNow(function()
+        local players = GetPlayers()
+
+        for i = 1, #players do
+            local player = tonumber(players[i])
+            exports['mps-elevator']:UpdatePlayerTargets(player)
+        end
+    end)
+
     return self
 end
 
