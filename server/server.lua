@@ -61,6 +61,33 @@ RegisterNetEvent('elevator:internal:closedinterface', function ()
     Events:removeActive(source)
 end)
 
+---Create a new elevator or batch of elevators
+---@param payload ElevatorData|ElevatorData[]
+---@return Elevator|Elevator[]
+function NewElevator(payload)
+    local payloadType = lib.table.type(payload)
+
+    if (payloadType == 'empty') then
+        error("An empty array was provided, can't generate stuff without data")
+    elseif (payloadType== 'mixed') then
+        error("An invalid array was provided, please follow documentation")
+    end
+
+    if (payloadType == 'hash') then
+        return Elevator:new(payload)
+    elseif (payloadType == 'array') then
+        local generatedElevators = {}
+
+        for i = 1, #payload do
+            local res = Elevator:new(payload[i])
+            table.insert(generatedElevators, res)
+        end
+
+        return generatedElevators
+    end
+end
+exports('NewElevator', NewElevator)
+
 if Config.VersionCheck then
     lib.versionCheck('Maximus7474/mps-elevator')
 end
