@@ -1,6 +1,7 @@
 if not CanResourceBeUsed(true) then return end
 
 local NUI = require 'client.modules.nui'
+local isTravelling = false
 
 RegisterNetEvent('elevator:updateelevators', function (
     elevators --[[ @as {name: string; id: string; floors: vector4[]} ]],
@@ -27,6 +28,7 @@ RegisterNetEvent('elevator:updateelevators', function (
 end)
 
 RegisterNetEvent('elevator:client:changingfloor', function (start)
+    isTravelling = start
     if (start) then
         DoScreenFadeOut(200)
     else
@@ -57,4 +59,11 @@ RegisterNUICallback('SetNewFloor', function(data, cb)
         restricted = response.restricted,
         floors = response.floors,
     });
+end)
+
+RegisterCommand('elevator_fix_fade', function ()
+    if (not isTravelling) then return print("[^3INFO^7] Not currently travelling") end
+
+    DoScreenFadeOut(200)
+    print("[^3INFO^7] Hopefully this cleared any issues, if not well shit then not much I can foreshadow from a single command.")
 end)
