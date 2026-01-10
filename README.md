@@ -6,6 +6,8 @@ If you want to go the extra step and show gratitude you can consider a donation 
 
   ![](https://img.shields.io/github/downloads/Maximus7474/mps-elevator/total?logo=github)
   ![](https://img.shields.io/github/v/release/Maximus7474/mps-elevator?logo=github)
+  ![](https://img.shields.io/github/downloads/Maximus7474/mps-elevator/total?logo=github)
+  ![](https://img.shields.io/github/v/release/Maximus7474/mps-elevator?logo=github)
 
 ⚠️ If you are not planning on developping this script download the latest release.
 
@@ -14,6 +16,7 @@ If you want to go the extra step and show gratitude you can consider a donation 
 
 > Preview:
 
+![image](https://github.com/Maximus7474/mps-elevator/assets/94017712/75fcdbda-4ba5-4935-862a-b84d222f5497)
 ![image](https://github.com/Maximus7474/mps-elevator/assets/94017712/75fcdbda-4ba5-4935-862a-b84d222f5497)
 
 > Without access the panel doesn't allow the user to access the elevator, if he has access the light is then green and he can move around freely
