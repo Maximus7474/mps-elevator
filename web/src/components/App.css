@@ -86,3 +86,26 @@ pre {
     font-weight: bold;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
+
+.status-light {
+    transition: color ease 0.5s;
+}
+
+.pulse {
+    animation: pulse 1s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+    filter: drop-shadow(0 0 10px var(--pulse-color, #ff0000));
+  }
+  50% {
+    opacity: 0.5;
+    filter: drop-shadow(0 0 0 rgba(0, 0, 0, 0));
+  }
+  100% {
+    opacity: 1;
+    filter: drop-shadow(0 5px 10px var(--pulse-color, #ff0000));
+  }
+}

@@ -6,33 +6,20 @@ import { useNuiEvent } from "../hooks/useNuiEvent";
 import FloorView from "./elements/floor-view";
 import FloorButton from "./elements/floor-button";
 import AccessIcon from "./elements/restricted-accessicon";
-
-interface floorButtons {
-  floor:string,
-  label:string,
-  index:number,
-}
-
-interface setFloorProps {
-  isRestricted: boolean;
-  hasAccess: boolean | null;
-  currentFloor: string;
-  floorButtons: floorButtons[]
-}
+import { AccessStatus, ElevatorData, FloorData } from "../types";
+import { formatFloorIcon } from "../utils/misc";
 
 debugData([
   {
-    action: "setFloors",
+    action: "SetElevatorData",
     data: {
-      isRestricted: true,
-      hasAccess: true,
-      currentFloor: 1,
-      floorButtons: [
-        {floor: "-1", label: "Underground 1", index: 1},
-        {floor: "0", label: "Lobby", index: 2},
-        {floor: "1", label: "First Floor", index: 3},
-      ]
-    },
+      restricted: true,
+      floors: [
+        { id: 1, name: 'Garage', icon: 'G', accessible: true, current: true },
+        { id: 2, name: 'Entrance', icon: '0', accessible: true, current: false },
+        { id: 3, name: 'Helipad', icon: 'H', accessible: false, current: false },
+      ],
+    } as ElevatorData,
   },
 ]);
 
@@ -43,37 +30,41 @@ debugData([
   },
 ]);
 
-const App: React.FC< any > = () => {
+const App: React.FC = () => {
 
-  const [currentFloor, setCurrentFloor] = useState<string>("0");
-  const [restricted, setRestricted] = useState<boolean>(false);
-  const [access, setAccess] = useState<boolean>(false);
-  const [floorButtons, setFloorButtons] = useState<floorButtons[]>([]);
+  const [currentFloor, setCurrentFloor] = useState<FloorData | "ERR" | null>(null);
+  const [access, setAccess] = useState<AccessStatus>('standby');
+  const [restrictedState, setRestrictedState] = useState<boolean>(false);
+  const [floorButtons, setFloorButtons] = useState<FloorData[]>([]);
 
-  useNuiEvent<setFloorProps>('setFloors', (data) => {
-    setCurrentFloor(data.currentFloor);
-    setFloorButtons(data.floorButtons);
-    setRestricted(data.isRestricted);
-    if (data.hasAccess && data.isRestricted) {
-      setAccess(data.hasAccess);
+  useNuiEvent<ElevatorData>('SetElevatorData', ({ restricted, floors, access = null }) => {
+    const currentFloor = floors.find((e) => e.current);
+
+    if (!currentFloor || floors.length < 1) {
+      setFloorButtons([]);
+      setCurrentFloor('ERR');
+      setAccess('denied');
+      return;
     }
+    
+    setAccess(access ?? 'standby');
+    setRestrictedState(restricted);
+    setCurrentFloor(currentFloor);
+    setFloorButtons(floors);
   });
 
-  const handleButtonClick = (floorIndex: number, clickedFloor: string) => {
-    if (restricted && !access) {
-      return setCurrentFloor("X");
+  const handleButtonClick = (floor: FloorData) => {
+    if (!floor.accessible) {
+      setAccess('denied');
+      return;
     }
-    fetchNui<boolean>("setNewFloor", {floorIndex: floorIndex})
-      .then((retData) => {
-        if (retData) {
-          setCurrentFloor(clickedFloor)
-        } else if (typeof clickedFloor === "boolean") {
-          setCurrentFloor("ERR");
-        };
-      })
-      .catch((e) => {
-        setCurrentFloor("ERR");
-      });
+
+    fetchNui<boolean>("SetNewFloor", { floorIndex: floor.id }, true)
+    .catch((e) => {
+      console.error('An error occured:', e);
+      setCurrentFloor("ERR");
+      setAccess('denied');
+    });
   };
 
   return (
@@ -82,12 +73,12 @@ const App: React.FC< any > = () => {
         <FloorView floor={currentFloor} />
         <div className="button-grid">
           {
-            floorButtons.map(({ floor, label, index }) => (
-              <FloorButton key={floor} floor={floor} label={label} onClick={() => handleButtonClick(index, floor)} />
+            floorButtons.map((floor) => (
+              <FloorButton key={floor.id} floor={formatFloorIcon(floor)} label={floor.name} onClick={() => handleButtonClick(floor)} />
             ))
           }
         </div>
-        <AccessIcon restricted={restricted} hasAccess={access}></AccessIcon>
+        <AccessIcon restricted={restrictedState} accessState={access} />
       </div>
     </div>
   );

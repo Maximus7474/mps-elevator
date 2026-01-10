@@ -1,68 +1,73 @@
 if not CanResourceBeUsed(true) then return end
 
+State = {
+    UIOpen = false,
+}
+
 local NUI = require 'client.modules.nui'
-local Utils = require 'client.modules.utils'
-local TP = require 'client.modules.teleport'
-local Framework = require (('client.modules.frameworks.%s'):format(GetFrameworkRequirePath()))
+local isTravelling = false
 
-local resourceName = GetCurrentResourceName()
-local currentElevator, isMoving = nil, false
-State = {}
+RegisterNetEvent('elevator:updateelevators', function (
+    elevators --[[ @as {name: string; id: string; floors: vector4[]} ]],
+    hardReset --[[ @as boolean ]]
+)
 
-AddEventHandler(("%s:openElevator"):format(resourceName), function (data)
-    DebugPrint('[^2openElevator^7]', data.data)
+    if (hardReset) then
+        ClElevator.clearAll()
+    end
 
-    local data = data.data
-    currentElevator = data.elevator
+    for i = 1, #elevators, 1 do
+        local data = elevators[i]
+        -- Only in the case of an elevator getting an update during runtime
+        -- if not hardReset flag takes care of it
+        if ClElevator.elevators[data.id] then
+            local elevator = ClElevator.elevators[data.id]
 
-    local isRestricted = Config.Elevators?[data.elevator]?.restricted or false
+            elevator:delete()
+            ClElevator.elevators[data.id] = nil
+        end
 
-    NUI.SendReactMessage('setFloors', {
-        isRestricted = isRestricted and true or false,
-        hasAccess = isRestricted and Framework:HasGroup(isRestricted) or nil,
-        currentFloor = data.floor,
-        floorButtons = Utils.FormatFloors(Config.Elevators?[data.elevator]?.floors)
-    })
-
-    State.UIOpen = true
-    NUI.ToggleNui(true)
+        ClElevator:new(elevators[i])
+    end
 end)
 
-if Config.Debug then
-    RegisterCommand('show-nui', function()
-        NUI.ToggleNui(true)
-        State.UIOpen = true
-        DebugPrint('Show NUI frame')
-    end)
-end
+RegisterNetEvent('elevator:client:changingfloor', function (start)
+    isTravelling = start
+    if (start) then
+        DoScreenFadeOut(200)
+    else
+        Wait(200)
+        DoScreenFadeIn(200)
+    end
+end)
 
 RegisterNUICallback('hideFrame', function(_, cb)
-    State.UIOpen = false
     NUI.ToggleNui(false)
-    currentElevator = nil
     DebugPrint('Hide NUI frame')
     cb({})
+
+    TriggerServerEvent('elevator:internal:closedinterface')
 end)
 
-RegisterNUICallback('setNewFloor', function(data, cb)
+RegisterNUICallback('SetNewFloor', function(data, cb)
+    local floorIndex = data.floorIndex
 
-    if isMoving then DebugPrint("Player is already moving, cancelling") return cb(nil) end
+    cb({})
 
-    isMoving = true
-    DebugPrint('Data received from NUI', json.encode(data))
+    local response = lib.callback.await('elevator:internal:setnewfloor', false, floorIndex) --[[ @as { success: boolean; restricted: boolean; floors: ElevatorFloor[] } ]]
 
-    local success = Citizen.Await(TP.GoToNewFloor(currentElevator, data.floorIndex))
+    lib.print.info('received response from "elevator:internal:setnewfloor"')
 
-    cb(success)
+    NUI.SendMessage('SetElevatorData', {
+        access = response.success and 'authorised' or 'denied',
+        restricted = response.restricted,
+        floors = response.floors,
+    });
+end)
 
-    if Config.Options.CloseUI then
-        SetTimeout(success and 250 or 500, function ()
-            isMoving = false
-            NUI.ToggleNui(false)
-            State.UIOpen = false
-        end)
-    else
-        isMoving = false
-        State.UIOpen = false
-    end
+RegisterCommand('elevator_fix_fade', function ()
+    if (not isTravelling) then return print("[^3INFO^7] Not currently travelling") end
+
+    DoScreenFadeOut(200)
+    print("[^3INFO^7] Hopefully this cleared any issues, if not well shit then not much I can foreshadow from a single command.")
 end)

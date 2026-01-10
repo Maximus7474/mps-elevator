@@ -25,7 +25,7 @@ function IsResourceStarting(resource)
     return state == "started" or state == "starting"
 end
 
-function GetFrameworkRequirePath()
+function GetFramework()
     if IsResourceStarting('es_extended') then return 'esx' end
     if IsResourceStarting('ox_core') then return 'ox' end
     if IsResourceStarting('qbx_core') then return 'qbox' end
