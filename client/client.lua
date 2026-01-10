@@ -26,6 +26,15 @@ RegisterNetEvent('elevator:updateelevators', function (
     end
 end)
 
+RegisterNetEvent('elevator:client:changingfloor', function (start)
+    if (start) then
+        DoScreenFadeOut(200)
+    else
+        Wait(200)
+        DoScreenFadeIn(200)
+    end
+end)
+
 RegisterNUICallback('hideFrame', function(_, cb)
     NUI.ToggleNui(false)
     DebugPrint('Hide NUI frame')
