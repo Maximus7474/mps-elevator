@@ -57,12 +57,12 @@ function Framework:HasItem(source, items)
 end
 
 AddEventHandler('esx:playerLoaded', function (playerId)
-    exports['mps-elevator']:UpdatePlayerTargets(playerId)
+    exports['mps-elevator']:UpdatePlayerTargets(playerId, false)
 end)
 AddEventHandler('esx:setJob', function (playerId, job, lastJob)
     if job == lastJob then return end
 
-    exports['mps-elevator']:UpdatePlayerTargets(playerId)
+    exports['mps-elevator']:UpdatePlayerTargets(playerId, true)
 end)
 
 return Framework

@@ -33,13 +33,13 @@ end
 
 RegisterNetEvent('QBCore:Server:OnPlayerLoaded', function ()
     local playerId = source
-    exports['mps-elevator']:UpdatePlayerTargets(playerId)
+    exports['mps-elevator']:UpdatePlayerTargets(playerId, true)
 end)
 AddEventHandler('QBCore:Server:OnJobUpdate', function (playerId)
-    exports['mps-elevator']:UpdatePlayerTargets(playerId)
+    exports['mps-elevator']:UpdatePlayerTargets(playerId, true)
 end)
 AddEventHandler('QBCore:Server:OnGangUpdate', function (playerId)
-    exports['mps-elevator']:UpdatePlayerTargets(playerId)
+    exports['mps-elevator']:UpdatePlayerTargets(playerId, true)
 end)
 
 return Framework

@@ -2,7 +2,8 @@ if not CanResourceBeUsed(true) then return end
 
 ---updates the elevators targetable by a client
 ---@param source any
-local function updatePlayerTargets(source)
+---@param hardReset boolean force client to "forget" prior elevators
+local function updatePlayerTargets(source, hardReset)
     if (not tonumber(source)) then return end
 
     local bucket = GetPlayerRoutingBucket(source)
@@ -16,7 +17,7 @@ local function updatePlayerTargets(source)
         end
     end
 
-    TriggerLatentClientEvent('elevator:updateelevators', source, -1, targets)
+    TriggerLatentClientEvent('elevator:updateelevators', source, -1, targets, hardReset)
 end
 exports('UpdatePlayerTargets', updatePlayerTargets)
 
@@ -25,7 +26,7 @@ Citizen.SetTimeout(500, function ()
 
     for i = 1, #players do
         local player = tonumber(players[i])
-        updatePlayerTargets(player)
+        updatePlayerTargets(player, true)
     end
 end)
 

@@ -81,7 +81,7 @@ function Elevator:new(data)
 
         for i = 1, #players do
             local player = tonumber(players[i])
-            exports['mps-elevator']:UpdatePlayerTargets(player)
+            exports['mps-elevator']:UpdatePlayerTargets(player, false)
         end
     end)
 

@@ -40,10 +40,10 @@ function Framework:HasItem(source, items)
 end
 
 AddEventHandler('ox:playerLoaded', function (playerId)
-    exports['mps-elevator']:UpdatePlayerTargets(playerId)
+    exports['mps-elevator']:UpdatePlayerTargets(playerId, true)
 end)
 AddEventHandler('ox:setGroup', function (playerId)
-    exports['mps-elevator']:UpdatePlayerTargets(playerId)
+    exports['mps-elevator']:UpdatePlayerTargets(playerId, true)
 end)
 
 return Framework
