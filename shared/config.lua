@@ -15,6 +15,8 @@ Config.Options = {
 
     --[[ Only if Target is false ]]
     DrawMarker = true,
+    --[[ Distance to show marker ]]
+    MarkerDistance = 10,
     --[[ Marker list: https://docs.fivem.net/docs/game-references/markers/ ]]
     Marker = {
         marker = 2,
