@@ -1,4 +1,5 @@
 local NUI = require 'client.modules.nui'
+local Target = require 'client.modules.target'
 
 ClElevator = {}
 ClElevator.__index = ClElevator
@@ -10,6 +11,7 @@ ClElevator.elevators = {} --[[ @as table<string, ClElevator> ]]
 ---@field floors vector4[]
 
 ---@class ClElevator : ClElevatorData
+---@field targets string[]|number[]
 ---@field openElevator fun(): nil
 ---@field delete fun(): nil
 
@@ -37,16 +39,12 @@ function ClElevator:new(data)
     for i = 1, #data.floors, 1 do
         local floor = data.floors[i]
 
-        local id = exports.ox_target:addSphereZone({
-            coords = floor.xyz,
-            options = {{
-                label = self.name,
-                icon = "fa-solid fa-elevator",
-                onSelect = function ()
-                    self:openElevator()
-                end,
-            }}
-        })
+        local id = Target:AddTarget({
+            xyz = floor.xyz,
+            name = self.name,
+        }, function ()
+            self:openElevator()
+        end)
 
         table.insert(self.targets, id)
     end
@@ -67,6 +65,6 @@ end
 
 function ClElevator:delete()
     for i = 1, #self.targets, 1 do
-        exports.ox_target:removeZone(self.targets[i])
+        Target:RemoveTarget(self.targets[i])
     end
 end
