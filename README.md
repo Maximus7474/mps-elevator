@@ -7,7 +7,6 @@ If you want to go the extra step and show gratitude you can consider a donation 
   ![](https://img.shields.io/github/downloads/Maximus7474/mps-elevator/total?logo=github)
   ![](https://img.shields.io/github/v/release/Maximus7474/mps-elevator?logo=github)
   ![](https://img.shields.io/github/downloads/Maximus7474/mps-elevator/total?logo=github)
-  ![](https://img.shields.io/github/v/release/Maximus7474/mps-elevator?logo=github)
 
 ⚠️ If you are not planning on developping this script download the latest release.
 
