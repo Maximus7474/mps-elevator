@@ -32,7 +32,7 @@ Config.Options = {
     TextUI = "Press [%s] to open elevator panel",
     Key = { id = 38, name = "E" },
 
-    --[[ Set to true if you don't want the UI to close automatically ]]
+    --[[ Set to true if you want the UI to close automatically ]]
     CloseUI = true,
 
     --[[ if false teleports immediatly ]]

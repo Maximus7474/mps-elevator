@@ -58,11 +58,15 @@ RegisterNUICallback('SetNewFloor', function(data, cb)
 
     lib.print.info('received response from "elevator:internal:setnewfloor"')
 
-    NUI.SendMessage('SetElevatorData', {
-        access = response.success and 'authorised' or 'denied',
-        restricted = response.restricted,
-        floors = response.floors,
-    });
+    if (response.success and Config.Options.CloseUI) then
+        NUI.ToggleNui(false)
+    else
+        NUI.SendMessage('SetElevatorData', {
+            access = response.success and 'authorised' or 'denied',
+            restricted = response.restricted,
+            floors = response.floors,
+        })
+    end
 end)
 
 RegisterCommand('elevator_fix_fade', function ()
