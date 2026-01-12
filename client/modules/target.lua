@@ -4,6 +4,32 @@ local zones = {}
 
 local zoneKey <const> = Config.Options.Key
 local textUiText <const> = string.format(Config.Options.TextUI, zoneKey.name)
+local markerData <const> = Config.Options.Marker
+
+---Used for debugging zones
+---Code credit @eblio - https://github.com/eblio/3dme/blob/master/client.lua#L12-L37
+---@param pos vector3
+---@param text string
+---@param color { r: number; g: number; b: number; a: number; }
+local function DrawText3D(pos, text, color)
+    local camCoords = GetGameplayCamCoord()
+    local dist = #(pos - camCoords)
+
+    local scale = 200 / (GetGameplayCamFov() * dist)
+
+    SetTextColour(color.r, color.g, color.b, 255)
+    SetTextScale(0.0, 0.25 * scale)
+    SetTextFont(0)
+    SetTextDropshadow(0, 0, 0, 0, 55)
+    SetTextDropShadow()
+    SetTextCentre(true)
+
+    BeginTextCommandDisplayText("STRING")
+    AddTextComponentSubstringPlayerName(text)
+    SetDrawOrigin(pos.x, pos.y, pos.z, 0)
+    EndTextCommandDisplayText(0.0, 0.0)
+    ClearDrawOrigin()
+end
 
 local function drawZoneMarker(CZone)
     DrawMarker(
@@ -14,6 +40,14 @@ local function drawZoneMarker(CZone)
         markerData.color.r, markerData.color.g, markerData.color.b, markerData.color.a,
         true, true, 2, false, false, false, false
     )
+
+    if (Config.DebugZones) then
+        DrawText3D(
+            CZone.coords + vector3(markerData.offset.x, markerData.offset.y, markerData.offset.z),
+            CZone.debugLabel,
+            CZone.debugColour
+        )
+    end
 end
 
 local function drawZoneTextUi(CZone, openFunc)
@@ -34,13 +68,14 @@ local function drawZoneTextUi(CZone, openFunc)
 end
 
 ---Create a new zone / target to open elevator
----@param data { xyz: vector3, name: string }
+---@param data { xyz: vector3, name: string, floor: number; }
 ---@param cb fun(): nil
 ---@return number targetId
 function Target:AddTarget(data, cb)
     if (Config.Options.Target) then
         return exports.ox_target:addSphereZone({
             coords = data.xyz,
+            debug = Config.DebugZones,
             options = {{
                 label = data.name,
                 icon = Config.Options.Icon or nil,
@@ -51,6 +86,9 @@ function Target:AddTarget(data, cb)
         local zone = lib.zones.sphere({
             coords = data.xyz,
             radius = Config.Options.MarkerDistance,
+
+            debug = Config.DebugZones,
+            debugLabel = string.format("elevator: '%s' - floor: %d", data.name, data.floor),
 
             onEnter = function (self)
                 lib.showTextUI(textUiText)
