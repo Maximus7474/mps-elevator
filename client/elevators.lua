@@ -56,7 +56,10 @@ end
 function ClElevator:openElevator()
     local elevatorData = lib.callback.await('elevator:getfloordata', false, self.id)
 
-    lib.print.info('open elevator called on', self.id, self.name, 'response:', elevatorData)
+    DebugPrint(string.format(
+        'Open elevator called on %s %s response:', self.id, self.name),
+        elevatorData
+    )
 
     if (not elevatorData) then return end
 

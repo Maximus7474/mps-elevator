@@ -32,11 +32,11 @@ end)
 
 lib.callback.register("elevator:getfloordata", function (source, elevatorId)
     local elevator = Elevator.elevators[elevatorId]
-    lib.print.info('elevator found:', not not elevator)
+    DebugPrint('elevator found:', elevator ~= nil)
     if (not elevator) then return false end
 
     local isAcceptable = elevator:isInElevator(source)
-    lib.print.info('elevator acceptable:', isAcceptable)
+    DebugPrint('elevator acceptable:', isAcceptable)
     if (not isAcceptable) then return false end
 
     Events:setActive(source, elevator.id);

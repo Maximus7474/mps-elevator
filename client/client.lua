@@ -58,7 +58,7 @@ RegisterNUICallback('SetNewFloor', function(data, cb)
 
     local response = lib.callback.await('elevator:internal:setnewfloor', false, floorIndex) --[[ @as { success: boolean; restricted: boolean; floors: ElevatorFloor[] } ]]
 
-    lib.print.info('received response from "elevator:internal:setnewfloor"')
+    DebugPrint('Received response from "elevator:internal:setnewfloor"')
 
     if (response.success and Config.Options.CloseUI) then
         NUI.ToggleNui(false)
