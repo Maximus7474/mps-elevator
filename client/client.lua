@@ -33,6 +33,9 @@ end)
 
 RegisterNetEvent('elevator:client:changingfloor', function (start)
     isTravelling = start
+
+    if (not Config.Options.ScreenFade) then return end
+
     if (start) then
         DoScreenFadeOut(200)
     else

@@ -216,12 +216,12 @@ function Elevator:gotoFloor(source, floorid)
         Player(source).state:set('instance', floorToGoto.bucket, true)
     end
 
-    Wait(200)
+    if (Config.Options.ScreenFade) then Wait(200) end
 
     SetEntityCoords(playerPed, floorToGoto.coords.x, floorToGoto.coords.y, floorToGoto.coords.z, true, false, false, false)
     SetEntityHeading(playerPed, floorToGoto.coords.w)
 
-    Wait(200)
+    if (Config.Options.ScreenFade) then Wait(200) end
 
     TriggerClientEvent('elevator:client:changingfloor', source, false)
 
