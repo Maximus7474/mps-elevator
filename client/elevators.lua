@@ -42,6 +42,7 @@ function ClElevator:new(data)
         local id = Target:AddTarget({
             xyz = floor.xyz,
             name = self.name,
+            floor = i,
         }, function ()
             self:openElevator()
         end)
