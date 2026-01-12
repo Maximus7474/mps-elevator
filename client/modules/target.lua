@@ -78,6 +78,9 @@ function Target:AddTarget(data, cb)
             debug = Config.DebugZones,
             options = {{
                 label = data.name,
+                -- Reduce by 5% so that it aligns with server checks
+                -- This is because I'm calculating distance differently then ox_target
+                distance = Config.Options.Distance * 0.95,
                 icon = Config.Options.Icon or nil,
                 onSelect = cb,
             }}
