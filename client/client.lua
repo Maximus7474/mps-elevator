@@ -37,10 +37,9 @@ RegisterNetEvent('elevator:client:changingfloor', function (start)
     if (not Config.Options.ScreenFade) then return end
 
     if (start) then
-        DoScreenFadeOut(200)
+        DoScreenFadeOut(Config.Options.FadeDuration)
     else
-        Wait(200)
-        DoScreenFadeIn(200)
+        DoScreenFadeIn(Config.Options.FadeDuration)
     end
 end)
 
