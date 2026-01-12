@@ -21,7 +21,8 @@ Config.Options = {
     Marker = {
         marker = 2,
         color = { r = 255, g = 255, b = 255, a = 150 },
-        size = { x = 0.75, y = 0.75, z = 0.75 }
+        size = { x = 0.75, y = 0.75, z = 0.75 },
+        offset = { x = 0.0, y = 0.0, z = 0.5 }, -- positional offset
     },
 
     --[[ Set the target Icon & Label - Not used if Target = false ]]

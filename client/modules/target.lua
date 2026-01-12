@@ -7,11 +7,11 @@ local textUiText <const> = string.format(Config.Options.TextUI, zoneKey.name)
 
 local function drawZoneMarker(CZone)
     DrawMarker(
-        Config.Options.Marker.marker,
-        CZone.coords.x, CZone.coords.y, CZone.coords.z,
+        markerData.marker,
+        CZone.coords.x + markerData.offset.x, CZone.coords.y + markerData.offset.y, CZone.coords.z + markerData.offset.z,
         0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-        Config.Options.Marker.size.x, Config.Options.Marker.size.y, Config.Options.Marker.size.z,
-        Config.Options.Marker.color.r, Config.Options.Marker.color.g, Config.Options.Marker.color.b, Config.Options.Marker.color.a,
+        markerData.size.x, markerData.size.y, markerData.size.z,
+        markerData.color.r, markerData.color.g, markerData.color.b, markerData.color.a,
         true, true, 2, false, false, false, false
     )
 end
