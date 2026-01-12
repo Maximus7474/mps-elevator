@@ -36,7 +36,7 @@ lib.callback.register("elevator:getfloordata", function (source, elevatorId)
     if (not elevator) then return false end
 
     local isAcceptable = elevator:isInElevator(source)
-    DebugPrint('elevator acceptable:', isAcceptable)
+    DebugPrint('is player in elevator range:', isAcceptable)
     if (not isAcceptable) then return false end
 
     Events:setActive(source, elevator.id);
