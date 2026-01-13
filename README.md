@@ -80,14 +80,21 @@ local res = Elevator:New({
 ```
 
 ## FAQ:
-Q: Why does my character/vehicle drop when changing floor
-A: You copy pasted the raw coords from a character position, this is 0.98 distance units above the ground. Either add ` - 0.98` after the z coordinate or subtract it from it.
+<details>
+<summary>Q: Why does my character/vehicle drop when changing floor</summary>
 
-Q: I need help using this.
+A: You copy pasted the raw coords from a character position, this is 0.98 distance units above the ground. Either add ` - 0.98` after the z coordinate or subtract it from it.
+</details>
+
+
+<details>
+<summary>Q: I need help using this.</summary>
+
 A: If this is too hard to use then you can either:
   * Create a suggestion for simplification (one that is **detailled** containing what is hard to grasp and especially **HOW** to improve it)
   * PR a change to simplify (explain **why** and **how** it helps the issue)
   * Want me to do it ? I'm kind enough to release stuff for free and open source, not like the rest of forum posts. Go buy one if you want support.
+</details>
 
 ## Credits:
 - [Project Error](https://github.com/project-error) for the react boilerplate [Github Repo](https://github.com/project-error/fivem-react-boilerplate-lua)
