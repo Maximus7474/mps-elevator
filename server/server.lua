@@ -54,7 +54,7 @@ Events:ElevatorCallback('elevator:internal:setnewfloor', function (source, eleva
     return {
         restricted = data.restricted,
         floors = data.floors,
-        access = success and 'authorized' or 'denied',
+        success = success,
     }
 end)
 
